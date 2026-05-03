@@ -1,6 +1,6 @@
 exports.handler = async (event) => {
   const name = event.queryStringParameters?.name || '';
-  const API_KEY = '1c109377f9b62c2048b8ed97dec57cb1ceabf944ca88e3a9e8dbef952e37e39';
+  const API_KEY = '1c109377f9b62c2048b8ed97dec57cb1ceabf944ca88e3a9e8dbef952e37e39f';
   const url = `https://apis.data.go.kr/1471000/DrbEasyDrugInfoService/getDrbEasyDrugList?serviceKey=${API_KEY}&itemName=${encodeURIComponent(name)}&type=json&numOfRows=10&pageNo=1`;
 
   try {

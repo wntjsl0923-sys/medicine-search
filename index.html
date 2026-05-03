@@ -9,78 +9,533 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0D0D0D;--bg2:#141414;--bg3:#1A1A1A;
-  --surface:#1E1E1E;--surface2:#252525;
-  --border:#2E2E2E;--border2:#3A3A3A;
-  --red:#C0392B;--red2:#E74C3C;--red-dim:#7A1E14;--red-glow:#C0392B33;
-  --gold:#C9A84C;--gold-dim:#6B5520;
-  --text:#E8E0D0;--text2:#A09880;--text3:#5A5248;
+  --bg:#04080F;
+  --bg2:#070D1A;
+  --bg3:#0A1020;
+  --surface:#0D1525;
+  --surface2:#111C30;
+  --border:#1A2D4A;
+  --border2:#1F3860;
+  --blue:#00A8FF;
+  --blue2:#4DC8FF;
+  --blue-dim:#003D5C;
+  --blue-glow:#00A8FF22;
+  --blue-glow2:#00A8FF44;
+  --lightning:#FFE566;
+  --gold:#C9A84C;
+  --gold-dim:#6B5520;
+  --text:#D0E8FF;
+  --text2:#7A9EC0;
+  --text3:#2E4A6A;
+  --white:#EEF6FF;
 }
-body{font-family:'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;position:relative;}
-body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 79px,#ffffff04 79px,#ffffff04 80px),repeating-linear-gradient(90deg,transparent,transparent 79px,#ffffff03 79px,#ffffff03 80px);pointer-events:none;z-index:0;}
-body::after{content:'';position:fixed;top:-200px;right:-200px;width:600px;height:600px;background:conic-gradient(from 0deg,transparent 0deg,#C0392B08 2deg,transparent 4deg,transparent 8deg,#C0392B05 10deg,transparent 12deg);pointer-events:none;z-index:0;}
-header{position:relative;z-index:10;background:var(--bg2);border-bottom:2px solid var(--red);padding:0 2rem;display:flex;align-items:stretch;justify-content:space-between;}
+
+body{
+  font-family:'Noto Sans KR',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  position:relative;
+}
+
+/* 별빛 배경 */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(ellipse at 20% 50%, #00A8FF0A 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, #4DC8FF08 0%, transparent 40%),
+    radial-gradient(ellipse at 60% 80%, #00A8FF06 0%, transparent 40%);
+  pointer-events:none;
+  z-index:0;
+}
+
+/* 번개 SVG 배경 */
+.lightning-bg{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  overflow:hidden;
+}
+
+.lightning-bg svg{
+  position:absolute;
+  width:100%;
+  height:100%;
+}
+
+/* 격자 패턴 */
+body::after{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 59px, #00A8FF08 59px, #00A8FF08 60px),
+    repeating-linear-gradient(90deg, transparent, transparent 59px, #00A8FF06 59px, #00A8FF06 60px);
+  pointer-events:none;
+  z-index:0;
+}
+
+/* 킬루아 실루엣 */
+.killua-silhouette{
+  position:fixed;
+  right:-20px;
+  bottom:0;
+  width:380px;
+  height:500px;
+  pointer-events:none;
+  z-index:1;
+  opacity:0.07;
+}
+
+/* 번개 애니메이션 */
+@keyframes lightningFlash{
+  0%,95%,100%{opacity:0}
+  96%{opacity:0.6}
+  97%{opacity:0.1}
+  98%{opacity:0.8}
+  99%{opacity:0}
+}
+@keyframes lightningFlash2{
+  0%,88%,100%{opacity:0}
+  89%{opacity:0.4}
+  90%{opacity:0.1}
+  91%{opacity:0.5}
+  92%{opacity:0}
+}
+.flash1{animation:lightningFlash 4s infinite;}
+.flash2{animation:lightningFlash2 6s infinite 2s;}
+
+/* 파티클 */
+.particles{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+}
+.particle{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:var(--blue2);
+  border-radius:50%;
+  animation:float linear infinite;
+  opacity:0;
+}
+@keyframes float{
+  0%{transform:translateY(100vh) translateX(0);opacity:0;}
+  10%{opacity:0.6;}
+  90%{opacity:0.3;}
+  100%{transform:translateY(-20px) translateX(30px);opacity:0;}
+}
+
+/* ── HEADER ── */
+header{
+  position:relative;
+  z-index:10;
+  background:linear-gradient(180deg, #070D1A 0%, #04080F 100%);
+  border-bottom:1px solid var(--border2);
+  padding:0 2rem;
+  display:flex;
+  align-items:stretch;
+  justify-content:space-between;
+}
+header::after{
+  content:'';
+  position:absolute;
+  bottom:0;left:0;right:0;
+  height:2px;
+  background:linear-gradient(90deg, transparent, var(--blue), var(--lightning), var(--blue), transparent);
+  animation:scanline 3s linear infinite;
+}
+@keyframes scanline{
+  0%{background-position:-200% 0}
+  100%{background-position:200% 0}
+}
+
 .logo-block{display:flex;align-items:center;padding:0.75rem 0;}
-.logo-nen{font-family:'Oswald',sans-serif;font-size:1.8rem;font-weight:700;color:var(--red2);letter-spacing:4px;}
-.logo-pharma{font-family:'Oswald',sans-serif;font-size:0.65rem;color:var(--gold);letter-spacing:6px;text-transform:uppercase;display:block;margin-top:2px;}
-.logo-sep{width:2px;background:var(--red-dim);margin:0 1.2rem;align-self:stretch;}
+.logo-nen{
+  font-family:'Oswald',sans-serif;
+  font-size:1.8rem;
+  font-weight:700;
+  color:var(--blue2);
+  letter-spacing:4px;
+  text-shadow:0 0 20px var(--blue), 0 0 40px var(--blue-dim);
+}
+.logo-pharma{
+  font-family:'Oswald',sans-serif;
+  font-size:0.65rem;
+  color:var(--lightning);
+  letter-spacing:6px;
+  text-transform:uppercase;
+  display:block;
+  margin-top:2px;
+  opacity:0.8;
+}
+.logo-sep{width:1px;background:linear-gradient(180deg,transparent,var(--blue),transparent);margin:0 1.2rem;align-self:stretch;}
 .logo-sub{font-family:'Oswald',sans-serif;font-size:0.7rem;color:var(--text3);letter-spacing:3px;text-transform:uppercase;align-self:center;}
-.rank-badge{align-self:center;background:var(--red-dim);border:1px solid var(--red);color:var(--red2);font-family:'Oswald',sans-serif;font-size:0.62rem;letter-spacing:2px;padding:4px 10px;text-transform:uppercase;}
-.hero{position:relative;z-index:2;padding:3rem 2rem 2.5rem;max-width:760px;margin:0 auto;}
-.hero::before{content:'';position:absolute;top:2rem;left:2rem;width:20px;height:20px;border-top:2px solid var(--red);border-left:2px solid var(--red);}
-.hero::after{content:'';position:absolute;bottom:1rem;right:2rem;width:20px;height:20px;border-bottom:2px solid var(--gold-dim);border-right:2px solid var(--gold-dim);}
-.eyebrow{font-family:'Oswald',sans-serif;font-size:0.62rem;letter-spacing:4px;color:var(--red2);text-transform:uppercase;margin-bottom:0.75rem;display:flex;align-items:center;gap:0.5rem;}
-.eyebrow::before{content:'';display:inline-block;width:24px;height:1px;background:var(--red2);}
-.hero-title{font-family:'Black Han Sans',sans-serif;font-size:2.8rem;color:var(--text);line-height:1.05;letter-spacing:-1px;margin-bottom:0.5rem;}
-.hero-title em{font-style:normal;color:var(--red2);}
+.rank-badge{
+  align-self:center;
+  background:var(--blue-dim);
+  border:1px solid var(--blue);
+  color:var(--blue2);
+  font-family:'Oswald',sans-serif;
+  font-size:0.62rem;
+  letter-spacing:2px;
+  padding:4px 10px;
+  text-transform:uppercase;
+  box-shadow:0 0 10px var(--blue-glow);
+}
+
+/* ── HERO ── */
+.hero{
+  position:relative;
+  z-index:2;
+  padding:3rem 2rem 2.5rem;
+  max-width:760px;
+  margin:0 auto;
+}
+.hero::before{
+  content:'';
+  position:absolute;
+  top:2rem;left:2rem;
+  width:20px;height:20px;
+  border-top:2px solid var(--blue);
+  border-left:2px solid var(--blue);
+  box-shadow:-2px -2px 8px var(--blue-glow2);
+}
+.hero::after{
+  content:'';
+  position:absolute;
+  bottom:1rem;right:2rem;
+  width:20px;height:20px;
+  border-bottom:2px solid var(--blue-dim);
+  border-right:2px solid var(--blue-dim);
+}
+
+.eyebrow{
+  font-family:'Oswald',sans-serif;
+  font-size:0.62rem;
+  letter-spacing:4px;
+  color:var(--blue2);
+  text-transform:uppercase;
+  margin-bottom:0.75rem;
+  display:flex;align-items:center;gap:0.5rem;
+}
+.eyebrow::before{content:'';display:inline-block;width:24px;height:1px;background:linear-gradient(90deg,var(--blue),transparent);}
+
+.hero-title{
+  font-family:'Black Han Sans',sans-serif;
+  font-size:2.8rem;
+  color:var(--white);
+  line-height:1.05;
+  letter-spacing:-1px;
+  margin-bottom:0.5rem;
+  text-shadow:0 0 30px var(--blue-glow2);
+}
+.hero-title em{
+  font-style:normal;
+  color:var(--blue2);
+  text-shadow:0 0 20px var(--blue), 0 0 40px var(--blue-dim);
+}
 .hero-desc{font-size:0.82rem;color:var(--text2);letter-spacing:0.5px;margin-bottom:2rem;font-weight:300;}
+
+/* 킬루아 번개 텍스트 장식 */
+.killua-tag{
+  display:inline-flex;
+  align-items:center;
+  gap:0.4rem;
+  background:var(--blue-glow);
+  border:1px solid var(--border2);
+  padding:0.2rem 0.6rem;
+  font-family:'Oswald',sans-serif;
+  font-size:0.58rem;
+  letter-spacing:2px;
+  color:var(--lightning);
+  text-transform:uppercase;
+  margin-bottom:1rem;
+}
+
+/* ── SEARCH ── */
 .search-outer{position:relative;margin-bottom:1.25rem;}
-.search-outer::before{content:'';position:absolute;left:-8px;top:0;bottom:0;width:3px;background:var(--red);clip-path:polygon(0 4px,100% 0,100% 100%,0 calc(100% - 4px));}
-.search-wrap{display:flex;background:var(--surface);border:1px solid var(--border2);border-top:2px solid var(--red-dim);overflow:hidden;transition:border-color 0.2s;}
-.search-wrap:focus-within{border-color:var(--red);border-top-color:var(--red2);}
-#searchInput{flex:1;border:none;outline:none;padding:1rem 1.25rem;font-family:'Noto Sans KR',sans-serif;font-size:0.95rem;background:transparent;color:var(--text);}
+.search-outer::before{
+  content:'';
+  position:absolute;
+  left:-8px;top:0;bottom:0;
+  width:3px;
+  background:linear-gradient(180deg,transparent,var(--blue),var(--lightning),var(--blue),transparent);
+  animation:pulseBar 2s ease-in-out infinite;
+}
+@keyframes pulseBar{
+  0%,100%{opacity:0.4;}
+  50%{opacity:1;box-shadow:0 0 8px var(--blue);}
+}
+
+.search-wrap{
+  display:flex;
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-top:2px solid var(--blue-dim);
+  overflow:hidden;
+  transition:border-color 0.2s, box-shadow 0.2s;
+}
+.search-wrap:focus-within{
+  border-color:var(--blue);
+  box-shadow:0 0 20px var(--blue-glow), inset 0 0 20px var(--blue-glow);
+}
+#searchInput{
+  flex:1;border:none;outline:none;
+  padding:1rem 1.25rem;
+  font-family:'Noto Sans KR',sans-serif;
+  font-size:0.95rem;
+  background:transparent;
+  color:var(--text);
+}
 #searchInput::placeholder{color:var(--text3);font-weight:300;}
-#searchBtn{background:var(--red);color:#fff;border:none;padding:0 1.75rem;font-family:'Oswald',sans-serif;font-size:0.9rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:background 0.15s;white-space:nowrap;}
-#searchBtn:hover{background:var(--red2);}
+#searchBtn{
+  background:linear-gradient(135deg,var(--blue-dim),#001D38);
+  color:var(--blue2);
+  border:none;
+  border-left:1px solid var(--blue);
+  padding:0 1.75rem;
+  font-family:'Oswald',sans-serif;
+  font-size:0.9rem;
+  font-weight:600;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:all 0.15s;
+  white-space:nowrap;
+  position:relative;
+}
+#searchBtn:hover{
+  background:var(--blue);
+  color:#000;
+  box-shadow:0 0 20px var(--blue);
+}
 #searchBtn:active{transform:scale(0.98);}
-#searchBtn:disabled{background:var(--red-dim);cursor:not-allowed;}
+#searchBtn:disabled{opacity:0.5;cursor:not-allowed;}
+
+/* ── CHIPS ── */
 .chips-label{font-family:'Oswald',sans-serif;font-size:0.6rem;letter-spacing:3px;color:var(--text3);text-transform:uppercase;margin-bottom:0.5rem;}
 .chips{display:flex;flex-wrap:wrap;gap:0.4rem;}
-.chip{background:transparent;border:1px solid var(--border2);color:var(--text2);padding:0.25rem 0.75rem;font-family:'Oswald',sans-serif;font-size:0.75rem;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all 0.15s;clip-path:polygon(6px 0,100% 0,100% 100%,0 100%,0 6px);}
-.chip:hover{border-color:var(--red);color:var(--red2);background:var(--red-glow);}
+.chip{
+  background:transparent;
+  border:1px solid var(--border);
+  color:var(--text2);
+  padding:0.25rem 0.75rem;
+  font-family:'Oswald',sans-serif;
+  font-size:0.75rem;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:all 0.15s;
+  clip-path:polygon(6px 0,100% 0,100% 100%,0 100%,0 6px);
+}
+.chip:hover{
+  border-color:var(--blue);
+  color:var(--blue2);
+  background:var(--blue-glow);
+  box-shadow:0 0 8px var(--blue-glow);
+}
+
+/* ── MAIN ── */
 .main{position:relative;z-index:2;max-width:760px;margin:0 auto;padding:0 2rem 5rem;}
+
+/* ── LOADING ── */
 .loading{display:none;text-align:center;padding:4rem 0;}
 .loading.show{display:block;}
-.aura-ring{width:60px;height:60px;border:2px solid var(--border2);border-top-color:var(--red2);border-right-color:var(--red-dim);border-radius:50%;animation:spin 0.6s linear infinite;margin:0 auto 1.25rem;}
+.aura-ring{
+  width:60px;height:60px;
+  border:2px solid var(--border2);
+  border-top-color:var(--blue2);
+  border-right-color:var(--lightning);
+  border-radius:50%;
+  animation:spin 0.5s linear infinite;
+  margin:0 auto 1.25rem;
+  box-shadow:0 0 15px var(--blue-glow2);
+}
 @keyframes spin{to{transform:rotate(360deg)}}
-.loading-text{font-family:'Oswald',sans-serif;font-size:0.7rem;letter-spacing:4px;color:var(--red2);text-transform:uppercase;animation:pulse 1.2s ease-in-out infinite;}
-@keyframes pulse{0%,100%{opacity:0.4}50%{opacity:1}}
-.error-box{display:none;border:1px solid var(--red-dim);border-left:3px solid var(--red2);background:rgba(192,57,43,0.08);padding:1rem 1.25rem;font-size:0.875rem;color:var(--red2);white-space:pre-line;}
+.loading-text{
+  font-family:'Oswald',sans-serif;
+  font-size:0.7rem;
+  letter-spacing:4px;
+  color:var(--blue2);
+  text-transform:uppercase;
+  animation:pulse 1s ease-in-out infinite;
+  text-shadow:0 0 10px var(--blue);
+}
+@keyframes pulse{0%,100%{opacity:0.3}50%{opacity:1}}
+
+/* ── ERROR ── */
+.error-box{
+  display:none;
+  border:1px solid var(--blue-dim);
+  border-left:3px solid var(--blue2);
+  background:var(--blue-glow);
+  padding:1rem 1.25rem;
+  font-size:0.875rem;
+  color:var(--blue2);
+  white-space:pre-line;
+}
 .error-box.show{display:block;}
+
+/* ── RESULT ── */
 .result-list{display:none;}
 .result-list.show{display:block;}
-.result-count{font-family:'Oswald',sans-serif;font-size:0.62rem;letter-spacing:3px;color:var(--text3);text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem;}
-.result-count span{color:var(--red2);}
-.drug-card{background:var(--surface);border:1px solid var(--border2);border-top:3px solid var(--red);margin-bottom:1rem;animation:fadeUp 0.3s ease;position:relative;overflow:hidden;}
+.result-count{
+  font-family:'Oswald',sans-serif;
+  font-size:0.62rem;
+  letter-spacing:3px;
+  color:var(--text3);
+  text-transform:uppercase;
+  margin-bottom:1rem;
+}
+.result-count span{color:var(--blue2);text-shadow:0 0 8px var(--blue);}
+
+.drug-card{
+  background:linear-gradient(135deg,var(--surface) 0%,var(--surface2) 100%);
+  border:1px solid var(--border2);
+  border-top:2px solid var(--blue);
+  margin-bottom:1rem;
+  animation:fadeUp 0.3s ease;
+  position:relative;
+  overflow:hidden;
+  transition:border-color 0.2s, box-shadow 0.2s;
+}
+.drug-card:hover{
+  border-color:var(--blue2);
+  box-shadow:0 0 20px var(--blue-glow), 0 4px 20px rgba(0,0,0,0.5);
+}
+.drug-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--lightning),transparent);
+  opacity:0;
+  transition:opacity 0.3s;
+}
+.drug-card:hover::before{opacity:1;}
+
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.card-header{background:var(--surface2);border-bottom:1px solid var(--border);padding:1rem 1.25rem;display:flex;align-items:flex-start;gap:1rem;}
-.drug-icon{width:44px;height:44px;background:var(--red-dim);border:1px solid var(--red);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);}
-.drug-name{font-family:'Black Han Sans',sans-serif;font-size:1.2rem;color:var(--text);line-height:1.1;}
-.drug-engname{font-size:0.75rem;color:var(--text3);font-weight:300;margin-top:2px;}
-.drug-category{font-family:'Oswald',sans-serif;font-size:0.62rem;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-top:4px;display:flex;align-items:center;gap:0.4rem;}
-.drug-category::before{content:'';display:inline-block;width:10px;height:1px;background:var(--gold-dim);}
+
+.card-header{
+  background:linear-gradient(135deg,var(--bg2) 0%,var(--surface) 100%);
+  border-bottom:1px solid var(--border);
+  padding:1rem 1.25rem;
+  display:flex;align-items:flex-start;gap:1rem;
+}
+.drug-icon{
+  width:44px;height:44px;
+  background:var(--blue-dim);
+  border:1px solid var(--blue);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;flex-shrink:0;
+  clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);
+  box-shadow:0 0 10px var(--blue-glow);
+}
+.drug-name{
+  font-family:'Black Han Sans',sans-serif;
+  font-size:1.2rem;
+  color:var(--white);
+  line-height:1.1;
+}
+.drug-mfr{font-size:0.75rem;color:var(--text3);font-weight:300;margin-top:2px;}
+.drug-category{
+  font-family:'Oswald',sans-serif;
+  font-size:0.62rem;
+  letter-spacing:3px;
+  color:var(--blue2);
+  text-transform:uppercase;
+  margin-top:4px;
+  display:flex;align-items:center;gap:0.4rem;
+}
+.drug-category::before{content:'·';font-size:0.6rem;}
+
 .card-body{padding:1rem 1.25rem;}
-.info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.75rem;margin-bottom:0.75rem;}
-.info-label{font-family:'Oswald',sans-serif;font-size:0.55rem;letter-spacing:2.5px;color:var(--red2);text-transform:uppercase;margin-bottom:3px;}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:0.75rem;margin-bottom:1rem;}
+.info-label{
+  font-family:'Oswald',sans-serif;
+  font-size:0.55rem;
+  letter-spacing:2.5px;
+  color:var(--blue2);
+  text-transform:uppercase;
+  margin-bottom:3px;
+}
 .info-val{font-size:0.82rem;color:var(--text2);font-weight:300;line-height:1.5;}
-.effect-section{margin-top:0.75rem;}
-.effect-text{font-size:0.82rem;color:var(--text2);line-height:1.7;font-weight:300;}
-.warn-row{margin-top:0.75rem;background:rgba(192,57,43,0.07);border:1px solid var(--red-dim);border-left:3px solid var(--red2);padding:0.6rem 0.85rem;font-size:0.78rem;color:var(--red2);line-height:1.6;}
-.warn-row::before{content:'! ';font-family:'Oswald',sans-serif;font-weight:700;}
-.card-footer{background:var(--bg2);border-top:1px solid var(--border);padding:0.6rem 1.25rem;font-family:'Oswald',sans-serif;font-size:0.58rem;letter-spacing:2px;color:var(--text3);text-transform:uppercase;display:flex;justify-content:space-between;}
-.empty{text-align:center;padding:5rem 2rem;color:var(--text3);}
-.empty-glyph{font-family:'Oswald',sans-serif;font-size:5rem;font-weight:700;color:var(--border2);line-height:1;margin-bottom:1rem;letter-spacing:-4px;}
-.empty p{font-family:'Oswald',sans-serif;font-size:0.7rem;letter-spacing:3px;text-transform:uppercase;color:var(--text3);line-height:2;}
+.effect-text{font-size:0.82rem;color:var(--text2);line-height:1.75;font-weight:300;}
+
+.warn-row{
+  margin-top:0.75rem;
+  background:rgba(0,168,255,0.05);
+  border:1px solid var(--blue-dim);
+  border-left:3px solid var(--blue);
+  padding:0.6rem 0.85rem;
+  font-size:0.78rem;
+  color:var(--blue2);
+  line-height:1.6;
+}
+.warn-row::before{content:'⚡ ';font-family:'Oswald',sans-serif;font-weight:700;}
+
+.tag-list{display:flex;flex-wrap:wrap;gap:0.35rem;margin-top:0.75rem;}
+.tag{
+  background:var(--bg3);
+  border:1px solid var(--border);
+  color:var(--text3);
+  padding:0.18rem 0.55rem;
+  font-family:'Oswald',sans-serif;
+  font-size:0.62rem;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.card-footer{
+  background:var(--bg2);
+  border-top:1px solid var(--border);
+  padding:0.6rem 1.25rem;
+  font-family:'Oswald',sans-serif;
+  font-size:0.58rem;
+  letter-spacing:2px;
+  color:var(--text3);
+  text-transform:uppercase;
+  display:flex;justify-content:space-between;
+}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:5rem 2rem;}
+.empty-glyph{
+  font-family:'Oswald',sans-serif;
+  font-size:5rem;
+  font-weight:700;
+  color:var(--border2);
+  line-height:1;
+  margin-bottom:1rem;
+  letter-spacing:-4px;
+  text-shadow:0 0 30px var(--blue-glow);
+}
+.empty p{
+  font-family:'Oswald',sans-serif;
+  font-size:0.7rem;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--text3);
+  line-height:2;
+}
+.no-result{
+  text-align:center;padding:3rem 0;
+  font-family:'Oswald',sans-serif;
+  font-size:0.7rem;
+  letter-spacing:3px;
+  color:var(--text3);
+  text-transform:uppercase;
+  display:none;
+}
+.no-result.show{display:block;}
+
 @media(max-width:600px){
   .hero{padding:2rem 1.25rem 2rem;}
   .hero-title{font-size:2rem;}
@@ -91,6 +546,30 @@ header{position:relative;z-index:10;background:var(--bg2);border-bottom:2px soli
 </style>
 </head>
 <body>
+
+<!-- 번개 배경 -->
+<div class="lightning-bg">
+  <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
+    <g class="flash1">
+      <polyline points="200,0 180,200 220,200 160,450 200,450 120,700" stroke="#FFE566" stroke-width="1.5" fill="none" opacity="0.6"/>
+      <polyline points="200,0 180,200 220,200 160,450 200,450 120,700" stroke="#00A8FF" stroke-width="4" fill="none" opacity="0.15"/>
+    </g>
+    <g class="flash2">
+      <polyline points="900,0 920,150 880,150 930,350 890,350 950,600" stroke="#FFE566" stroke-width="1.5" fill="none" opacity="0.5"/>
+      <polyline points="900,0 920,150 880,150 930,350 890,350 950,600" stroke="#00A8FF" stroke-width="4" fill="none" opacity="0.1"/>
+    </g>
+    <g class="flash1" style="animation-delay:1.5s">
+      <polyline points="1300,100 1280,280 1320,280 1260,500" stroke="#FFE566" stroke-width="1" fill="none" opacity="0.4"/>
+    </g>
+  </svg>
+</div>
+
+<!-- 파티클 -->
+<div class="particles" id="particles"></div>
+
+
+
+
 <header>
   <div class="logo-block">
     <div>
@@ -100,9 +579,11 @@ header{position:relative;z-index:10;background:var(--bg2);border-bottom:2px soli
     <div class="logo-sep"></div>
     <span class="logo-sub">약 정보 검색</span>
   </div>
-  <div class="rank-badge">식약처 공식 DB</div>
+  <div class="rank-badge">⚡ 식약처 공식 DB</div>
 </header>
+
 <div class="hero">
+  
   <div class="eyebrow">e약은요 · 식품의약품안전처</div>
   <h1 class="hero-title">어떤 약을<br><em>찾고 있나?</em></h1>
   <p class="hero-desc">약 이름을 입력하면 식약처 공식 DB에서 실제 허가 정보를 가져옵니다.</p>
@@ -124,6 +605,7 @@ header{position:relative;z-index:10;background:var(--bg2);border-bottom:2px soli
     <span class="chip" onclick="quickSearch('베아제')">베아제</span>
   </div>
 </div>
+
 <div class="main">
   <div class="loading" id="loading">
     <div class="aura-ring"></div>
@@ -134,12 +616,27 @@ header{position:relative;z-index:10;background:var(--bg2);border-bottom:2px soli
     <div class="result-count" id="resultCount"></div>
     <div id="resultCards"></div>
   </div>
+  <div class="no-result" id="noResult">검색 결과 없음 — 다른 키워드로 시도해보세요</div>
   <div class="empty" id="emptyState">
-    <div class="empty-glyph">Rx</div>
-    <p>검색어를 입력하세요<br>식약처 공식 DB에서 실제 약 정보를 검색합니다</p>
+    <div class="empty-glyph">⚡Rx</div>
+    <p>약 이름을 입력하세요<br>식약처 공식 DB에서 실제 약 정보를 검색합니다</p>
   </div>
 </div>
+
 <script>
+// 파티클 생성
+const particlesEl = document.getElementById('particles');
+for(let i=0;i<20;i++){
+  const p = document.createElement('div');
+  p.className = 'particle';
+  p.style.left = Math.random()*100 + '%';
+  p.style.animationDuration = (8+Math.random()*12) + 's';
+  p.style.animationDelay = (Math.random()*10) + 's';
+  p.style.width = p.style.height = (1+Math.random()*2) + 'px';
+  p.style.opacity = Math.random()*0.5;
+  particlesEl.appendChild(p);
+}
+
 async function searchMedicine(query) {
   const input = (query || document.getElementById('searchInput').value).trim();
   if (!input) return;
@@ -148,6 +645,7 @@ async function searchMedicine(query) {
   document.getElementById('loading').classList.add('show');
   document.getElementById('resultList').classList.remove('show');
   document.getElementById('errorBox').classList.remove('show');
+  document.getElementById('noResult').classList.remove('show');
   document.getElementById('emptyState').style.display = 'none';
 
   try {
@@ -157,12 +655,14 @@ async function searchMedicine(query) {
     const items = data?.body?.items;
     const total = data?.body?.totalCount || 0;
     if (!items || items.length === 0) {
-      showError(`"${input}" 검색 결과가 없습니다.\n정확한 약품명으로 다시 검색해보세요.`);
+      document.getElementById('noResult').classList.add('show');
       return;
     }
     showResults(items, total, input);
   } catch(e) {
-    showError('데이터를 불러오지 못했습니다.\n오류: ' + e.message);
+    const b = document.getElementById('errorBox');
+    b.textContent = '데이터를 불러오지 못했습니다.\n오류: ' + e.message;
+    b.classList.add('show');
   } finally {
     document.getElementById('searchBtn').disabled = false;
     document.getElementById('loading').classList.remove('show');
@@ -171,9 +671,9 @@ async function searchMedicine(query) {
 
 function showResults(items, total, query) {
   document.getElementById('resultCount').innerHTML = `"${query}" 검색결과 — <span>${Number(total).toLocaleString()}건</span> 중 ${items.length}건 표시`;
-  document.getElementById('resultCards').innerHTML = items.map((item, i) => {
+  document.getElementById('resultCards').innerHTML = items.map((item,i) => {
     const name = item.itemName || '—';
-    const engName = item.entpName || '';
+    const mfr = item.entpName || '';
     const effect = clean(item.efcyQesitm) || '—';
     const usage = clean(item.useMethodQesitm) || '—';
     const warn = clean(item.atpnWarnQesitm || item.atpnQesitm) || '';
@@ -186,44 +686,33 @@ function showResults(items, total, query) {
         <div class="drug-icon">💊</div>
         <div>
           <div class="drug-name">${name}</div>
-          ${engName ? `<div class="drug-engname">${engName}</div>` : ''}
-          <div class="drug-category">${otc === '전문의약품' ? '처방전 필요' : otc === '일반의약품' ? '일반의약품' : otc || '의약품'}${classNo ? ' · ' + classNo : ''}</div>
+          ${mfr?`<div class="drug-mfr">${mfr}</div>`:''}
+          <div class="drug-category">${otc==='전문의약품'?'처방전 필요':otc==='일반의약품'?'일반의약품':otc||'의약품'}${classNo?' · '+classNo:''}</div>
         </div>
       </div>
       <div class="card-body">
         <div class="info-grid">
-          <div><div class="info-label">용법 · 용량</div><div class="info-val">${usage.length > 120 ? usage.slice(0,120) + '...' : usage}</div></div>
-          ${storage ? `<div><div class="info-label">보관 방법</div><div class="info-val">${storage}</div></div>` : ''}
+          <div><div class="info-label">용법 · 용량</div><div class="info-val">${usage.length>120?usage.slice(0,120)+'...':usage}</div></div>
+          ${storage?`<div><div class="info-label">보관 방법</div><div class="info-val">${storage}</div></div>`:''}
         </div>
-        <div class="effect-section">
-          <div class="info-label" style="margin-bottom:4px;">효능 · 효과</div>
-          <div class="effect-text">${effect.length > 200 ? effect.slice(0,200) + '...' : effect}</div>
-        </div>
-        ${warn ? `<div class="warn-row">${warn.length > 150 ? warn.slice(0,150) + '...' : warn}</div>` : ''}
+        <div><div class="info-label" style="margin-bottom:4px">효능 · 효과</div><div class="effect-text">${effect.length>200?effect.slice(0,200)+'...':effect}</div></div>
+        ${warn?`<div class="warn-row">${warn.length>150?warn.slice(0,150)+'...':warn}</div>`:''}
       </div>
       <div class="card-footer">
         <span>식품의약품안전처 공식 데이터</span>
-        <span>${new Date().toLocaleDateString('ko-KR')} 기준</span>
+        <span>${otc==='전문의약품'?'⚡ 처방전 필요':'약국 구매 가능'}</span>
       </div>
     </div>`;
   }).join('');
   document.getElementById('resultList').classList.add('show');
 }
 
-function clean(str) {
-  if (!str) return '';
-  return str.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+function clean(str){
+  if(!str)return'';
+  return str.replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim();
 }
-
-function showError(msg) {
-  const b = document.getElementById('errorBox');
-  b.textContent = msg;
-  b.classList.add('show');
-  document.getElementById('emptyState').style.display = 'none';
-}
-
-function quickSearch(n) { searchMedicine(n); }
-document.getElementById('searchInput').addEventListener('keydown', e => { if(e.key==='Enter') searchMedicine(); });
+function quickSearch(n){searchMedicine(n);}
+document.getElementById('searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')searchMedicine();});
 </script>
 </body>
 </html>

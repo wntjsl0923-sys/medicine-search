@@ -692,11 +692,11 @@ function showResults(items, total, query) {
       </div>
       <div class="card-body">
         <div class="info-grid">
-          <div><div class="info-label">용법 · 용량</div><div class="info-val">${usage.length>120?usage.slice(0,120)+'...':usage}</div></div>
+          <div><div class="info-label">용법 · 용량</div><div class="info-val">${usage}</div></div>
           ${storage?`<div><div class="info-label">보관 방법</div><div class="info-val">${storage}</div></div>`:''}
         </div>
-        <div><div class="info-label" style="margin-bottom:4px">효능 · 효과</div><div class="effect-text">${effect.length>200?effect.slice(0,200)+'...':effect}</div></div>
-        ${warn?`<div class="warn-row">${warn.length>150?warn.slice(0,150)+'...':warn}</div>`:''}
+        <div><div class="info-label" style="margin-bottom:4px">효능 · 효과</div><div class="effect-text">${effect}</div></div>
+        ${warn?`<div class="warn-row">${warn}</div>`:''}
       </div>
       <div class="card-footer">
         <span>식품의약품안전처 공식 데이터</span>
